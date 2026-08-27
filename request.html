@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Request — Ellen Presents</title>
+  <meta name="description" content="Tell us about your event. Every event we run is built from scratch, so the more you can share, the more useful our first reply will be." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&amp;family=Libre+Franklin:wght@400;500;600&amp;display=swap" />
+  <link rel="stylesheet" href="assets/css/site.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Main">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">Ellen Presents</span>
+        <span class="brand-rule" aria-hidden="true"><i></i><b></b><i></i></span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu">Menu</button>
+      <div class="nav-menu" id="nav-menu">
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="experience.html">Experience</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+        <a class="nav-cta" href="request.html" aria-current="page">Start Planning</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+        <section class="page-head">
+          <div class="wrap">
+            <div class="inner">
+              <p class="eyebrow">Request</p>
+              <h1>Tell us about your event.</h1>
+              <p class="lede">
+                Every event we run is built from scratch, so the more you can share, the
+                more useful our first reply will be. Approximate answers are fine.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="sec">
+          <div class="wrap">
+            <div class="form-shell">
+              <form id="enquiryForm" novalidate>
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="name">Name</label>
+                    <input id="name" name="name" type="text" autocomplete="name" required aria-describedby="err-name" />
+                  <div class="field-error" id="err-name" data-for="name"></div>
+                  </div>
+                  <div class="field">
+                    <label for="company">Company</label>
+                    <input id="company" name="company" type="text" autocomplete="organization" />
+                  </div>
+                  <div class="field">
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="email" autocomplete="email" required aria-describedby="err-email" />
+                  <div class="field-error" id="err-email" data-for="email"></div>
+                  </div>
+                  <div class="field">
+                    <label for="eventType">Event type</label>
+                    <select id="eventType" name="eventType" required aria-describedby="err-eventType">
+                      <option value="">Please select</option>
+                      <option>LP hosting &amp; visits</option>
+                      <option>Investor meeting or AGM</option>
+                      <option>High-end social event</option>
+                      <option>Executive team retreat</option>
+                      <option>Community engagement event</option>
+                      <option>University student networking</option>
+                      <option>Something else</option>
+                    </select>
+                  <div class="field-error" id="err-eventType" data-for="eventType"></div>
+                  </div>
+                  <div class="field">
+                    <label for="location">Event location</label>
+                    <input id="location" name="location" type="text" placeholder="City, or undecided" />
+                  </div>
+                  <div class="field">
+                    <label for="date">Event date</label>
+                    <input id="date" name="date" type="text" placeholder="Approximate is fine" />
+                  </div>
+                  <div class="field full">
+                    <label for="guests">Estimated guest count</label>
+                    <input id="guests" name="guests" type="text" placeholder="A range is fine" />
+                  </div>
+                  <fieldset class="field full scope">
+                    <legend>What you need help with</legend>
+                    <div class="check-grid">
+                      <label class="check"><input type="checkbox" name="scope" value="Venue sourcing" /><span>Venue sourcing</span></label>
+                      <label class="check"><input type="checkbox" name="scope" value="Accommodations" /><span>Accommodations</span></label>
+                      <label class="check"><input type="checkbox" name="scope" value="Food & beverage" /><span>Food &amp; beverage</span></label>
+                      <label class="check"><input type="checkbox" name="scope" value="Production & AV" /><span>Production &amp; AV</span></label>
+                      <label class="check"><input type="checkbox" name="scope" value="Transportation" /><span>Transportation</span></label>
+                      <label class="check"><input type="checkbox" name="scope" value="Registration & guest communications" /><span>Registration &amp; guest communications</span></label>
+                      <label class="check"><input type="checkbox" name="scope" value="Onsite management" /><span>Onsite management</span></label>
+                      <label class="check"><input type="checkbox" name="scope" value="Full end-to-end planning" /><span>Full end-to-end planning</span></label>
+                    </div>
+                  </fieldset>
+                  <div class="field full">
+                    <label for="message">Tell us about your event</label>
+                    <textarea id="message" name="message" required aria-describedby="err-message"></textarea>
+                  <div class="field-error" id="err-message" data-for="message"></div>
+                  </div>
+                  <div class="form-status" id="formStatus" hidden></div>
+                  <div class="form-foot">
+                    <button class="btn" type="submit">Start Planning</button>
+                    <p>Or email <a href="mailto:hello@ellenpresents.com">hello@ellenpresents.com</a></p>
+                  </div>
+                </div>
+              </form>
+
+              <aside class="aside">
+                <dl>
+                  <dt>Response time</dt>
+                  <dd>Within one business day, across U.S. and Asia time zones.</dd>
+                  <dt>Discretion</dt>
+                  <dd>Everything you share stays confidential, including at the enquiry stage.</dd>
+                  <dt>Engagements</dt>
+                  <dd>Tailored based on event scope, complexity, location, and onsite support requirements.</dd>
+                  <dt>Lead time</dt>
+                  <dd>Earlier is better for venue availability, but we regularly take on programs at short notice.</dd>
+                </dl>
+              </aside>
+            </div>
+          </div>
+        </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="foot-top">
+        <div>
+          <h3>Boutique corporate events, thoughtfully executed.</h3>
+          <p class="foot-lead">
+            High-end corporate events, managed end to end, for venture capital and private
+            equity firms, family offices, and professional services companies.
+          </p>
+        </div>
+        <div class="foot-col">
+          <h4>Site</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="experience.html">Selected Experience</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="request.html">Request</a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h4>Enquiries</h4>
+          <ul>
+            <li><a href="mailto:hello@ellenpresents.com">hello@ellenpresents.com</a></li>
+            <li><a href="request.html">Start Planning</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot-bot">
+        <span>&copy; <span id="year">2026</span> Ellen Presents. All rights reserved.</span>
+        <span>Engagements are tailored to scope, complexity, and location.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/site.js"></script>
+</body>
+</html>
