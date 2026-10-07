@@ -62,7 +62,6 @@ html[lang|="zh"] body { line-height: 1.85; }
    apart; enough is kept to still read as a label. */
 html[lang|="zh"] .eyebrow,
 html[lang|="zh"] .svc .fn,
-html[lang|="zh"] .case-meta b,
 html[lang|="zh"] .case-meta span,
 html[lang|="zh"] label,
 html[lang|="zh"] .scope legend,
@@ -76,7 +75,6 @@ html[lang|="zh"] .tags span { letter-spacing: 0.08em; }
    had reason to distinguish by cap height. */
 html[lang|="zh"] .eyebrow,
 html[lang|="zh"] .svc .fn,
-html[lang|="zh"] .case-meta b,
 html[lang|="zh"] .case-meta span,
 html[lang|="zh"] label,
 html[lang|="zh"] .scope legend,
@@ -359,16 +357,11 @@ a:hover { color: var(--accent-2); }
   padding: clamp(26px, 3.6vw, 44px) 0;
   border-bottom: 1px solid var(--line);
 }
-.case-meta { display: flex; flex-direction: column; gap: 7px; }
-.case-meta b {
-  font-family: var(--sans);
-  font-size: 0.79rem;
-  font-weight: 600;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: var(--ink);
-}
+/* The event name is the case's title and takes the global h3; the
+   location sits under it as a label. */
+.case-meta { display: flex; flex-direction: column; gap: 9px; }
 .case-meta span {
+  font-family: var(--sans);
   font-size: 0.79rem;
   font-weight: 500;
   letter-spacing: 0.13em;
