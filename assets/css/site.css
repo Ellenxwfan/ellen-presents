@@ -67,6 +67,22 @@ html[lang|="zh"] .case-meta span,
 html[lang|="zh"] label,
 html[lang|="zh"] .scope legend,
 html[lang|="zh"] .tags span { letter-spacing: 0.08em; }
+
+/* Every label here was sized for uppercase Latin, which stays legible down at
+   11px. A Chinese glyph packs many more strokes into the same em box and turns
+   to mush there, so each one comes up to at least 13px. */
+/* rem resolves against the 16px root, not the 17px body, so 0.84rem lands at
+   13.4px — one size for every label, rather than the five the Latin setting
+   had reason to distinguish by cap height. */
+html[lang|="zh"] .eyebrow,
+html[lang|="zh"] .svc .fn,
+html[lang|="zh"] .case-meta b,
+html[lang|="zh"] .case-meta span,
+html[lang|="zh"] label,
+html[lang|="zh"] .scope legend,
+html[lang|="zh"] .tags span,
+html[lang|="zh"] .nav-toggle { font-size: 0.84rem; }
+html[lang|="zh"] .nav-cta { font-size: 0.88rem; }
 /* The wordmark stays Latin on both versions. */
 html[lang|="zh"] .brand-mark { font-family: "EB Garamond", Georgia, serif; letter-spacing: 0.21em; }
 
@@ -360,6 +376,9 @@ a:hover { color: var(--accent-2); }
   color: var(--brass);
 }
 .case-body { display: flex; flex-direction: column; gap: 13px; }
+/* Matches .row p and .svc p. At full body size it sat only a couple of
+   pixels under the h3 beside it and the hierarchy flattened. */
+.case-body p { font-size: 0.98rem; }
 .tags { display: flex; flex-wrap: wrap; gap: 7px; }
 .tags span {
   font-size: 0.72rem;
