@@ -1,31 +1,42 @@
 # Ellen Presents
 
-Marketing site for Ellen Presents — a boutique corporate events firm in the
-San Francisco Bay Area, working with venture capital and private equity firms,
-family offices, and professional services companies.
+Marketing site for Ellen Presents — boutique corporate events in the San
+Francisco Bay Area, for venture capital and private equity firms, family
+offices, and professional services companies.
 
-A static, five-page site. No build step, no dependencies, no framework — open
+A single static page. No build step, no dependencies, no framework — open
 `index.html` in a browser and it runs.
 
 ## Structure
 
 ```
-index.html          Home
-services.html       Services
-experience.html     Selected Experience
-about.html          About
-request.html        Enquiry form
-assets/css/site.css Shared stylesheet (palette, type, layout, responsive rules)
-assets/js/site.js   Shared behaviour (mobile nav, footer year, form validation)
+index.html            The whole site
+assets/css/site.css   Palette, type, layout, responsive rules
+assets/js/site.js     Mobile nav, scroll-spy, footer year, form handling
+CNAME                 Custom domain for GitHub Pages
+.nojekyll             Stops Pages running the files through Jekyll
 ```
 
-Every page carries the same header and footer markup inline. There is no
-templating layer, so a change to the nav or footer needs to be made in all
-five files.
+The page runs in one scroll, with each section carrying the id its nav link
+points at:
+
+```
+#top          Hero
+#services     What We Do — four service cards
+#why          Why Us — background, then four rows
+#experience   Selected Experience — four programs
+#about        About — pull quote and a closing line
+#request      Enquiry form
+```
+
+Sections set `scroll-margin-top` so a nav jump clears the sticky header; if
+the header's height changes, that value in `site.css` has to change with it.
+An `IntersectionObserver` in `site.js` marks the nav link for whichever
+section is in view.
 
 ## Local preview
 
-Opening the files directly works. To serve them over HTTP instead:
+Opening the file directly works. To serve over HTTP instead:
 
 ```sh
 python3 -m http.server 8000
@@ -34,43 +45,44 @@ python3 -m http.server 8000
 
 ## Deploying
 
-The site is plain static files, so any static host works — GitHub Pages,
-Netlify, Cloudflare Pages, S3 + CloudFront.
-
-For GitHub Pages: repository **Settings → Pages → Build and deployment**,
-source **Deploy from a branch**, and pick this branch with folder `/ (root)`.
-The `.nojekyll` file stops Pages from running the files through Jekyll.
+Plain static files, so any static host works. For GitHub Pages: repository
+**Settings → Pages → Build and deployment**, source **Deploy from a branch**,
+`main` with folder `/ (root)`. `CNAME` points the site at ellenpresents.com,
+which also needs the four GitHub Pages A records on the apex domain at the
+registrar.
 
 ## Wiring up the enquiry form
 
-The form on `request.html` validates in the browser, but a static site has no
-server to post to. Until a backend is connected, a valid submission opens the
-visitor's mail client with every field already composed into a message to
-`hello@ellenpresents.com`, and the on-page status repeats that address so an
-enquiry is never silently lost when no mail client is configured.
+The form validates in the browser, but a static site has no server to post
+to. Until a backend is connected, a valid submission opens the visitor's mail
+client with every field composed into a message to `hello@ellenpresents.com`,
+and the on-page status repeats that address so an enquiry is never silently
+lost when no mail client is configured.
 
-To connect a real form service (Formspree, Getform, Basin, or similar):
+To connect a form service (Formspree, Getform, Basin, or similar):
 
-1. Add the endpoint as the form's `action` in `request.html` and set
+1. Add the endpoint as the form's `action` in `index.html` and set
    `method="post"`.
-2. In `assets/js/site.js`, replace the `window.location.href = compose();`
-   line at the end of the submit handler with a `fetch()` POST to that
-   endpoint, and show the success or failure message in `#formStatus`.
+2. In `assets/js/site.js`, replace `window.location.href = compose();` at the
+   end of the submit handler with a `fetch()` POST to that endpoint, and show
+   the success or failure message in `#formStatus`.
 
-Keep the validation block above it — it is what populates the inline field
-errors and the `aria-invalid` states.
+Keep the validation block above it — it populates the inline field errors and
+the `aria-invalid` states.
 
 ## Content and brand notes
 
 - **Palette** is drawn from the logo: a cream field as the ground, navy as
   ink, a lighter navy as the interactive accent, and aged brass reserved for
-  small uppercase labels. The site is deliberately light-only — it is a brand
-  surface, and the brand is light. Colors are painted explicitly so the page
-  does not borrow a viewer's dark theme.
-- **Type** is EB Garamond for display and Libre Franklin for text, loaded from
-  Google Fonts with local serif/sans fallbacks.
-- **The wordmark** in the header is set in type rather than as artwork. To use
-  the full monogram, replace the two `<span>`s inside `.brand` with an `<img>`
-  or inline `<svg>`; the surrounding CSS already reserves the right space.
-- **Client names are withheld** throughout, by design. `experience.html`
-  describes programs by type, location, and scope only.
+  small uppercase labels. The site is deliberately light-only, and colors are
+  painted explicitly so the page does not borrow a viewer's dark theme.
+- **Type** is EB Garamond for display and Libre Franklin for text, from
+  Google Fonts, with local serif/sans fallbacks.
+- **The wordmark** in the header is set in type rather than artwork. To use
+  the monogram, replace the two `<span>`s inside `.brand` with an `<img>` or
+  inline `<svg>`; the surrounding CSS already reserves the space.
+- **No personal name and no employer** appears in the copy, by choice. The
+  background paragraph under Why Us describes the experience without naming
+  anyone, and avoids calling the business a firm, since it is one person.
+- **Client names are withheld** throughout. Selected Experience describes
+  programs by type, location, and scope only.
