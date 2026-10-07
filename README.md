@@ -10,7 +10,8 @@ A single static page. No build step, no dependencies, no framework — open
 ## Structure
 
 ```
-index.html            The whole site
+index.html            English site
+zh/index.html         Chinese site
 assets/css/site.css   Palette, type, layout, responsive rules
 assets/js/site.js     Mobile nav, scroll-spy, footer year, form handling
 CNAME                 Custom domain for GitHub Pages
@@ -33,6 +34,15 @@ Sections set `scroll-margin-top` so a nav jump clears the sticky header; if
 the header's height changes, that value in `site.css` has to change with it.
 An `IntersectionObserver` in `site.js` marks the nav link for whichever
 section is in view.
+
+## Cache busting
+
+Both pages load the stylesheet and script with a `?v=` query string. GitHub
+Pages serves assets with a cache lifetime, so a visitor who has been to the
+site before keeps the old CSS on an ordinary refresh and sees stale styling
+while the HTML is current. **Bump the number in both `index.html` and
+`zh/index.html` whenever `site.css` or `site.js` changes**, and the browser
+fetches the new file instead of reusing the cached one.
 
 ## Local preview
 
