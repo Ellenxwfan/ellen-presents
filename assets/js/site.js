@@ -25,6 +25,47 @@
     window.addEventListener('resize', function () {
       if (window.innerWidth > 720) closeMenu();
     });
+    /* The nav scrolls rather than navigates, so nothing else would close the
+       menu after a tap on a phone. */
+    menu.addEventListener('click', function (e) {
+      if (e.target.closest('a')) closeMenu();
+    });
+  }
+
+  /* --------------------------------------------------- Current section mark
+     One page, so "which page am I on" becomes "which section is in view".
+     Marks the nav link for whichever section covers the top of the viewport. */
+  var navLinks = Array.prototype.slice.call(
+    document.querySelectorAll('.site-header a[href^="#"]')
+  ).filter(function (a) {
+    return a.getAttribute('href').length > 1 && document.querySelector(a.getAttribute('href'));
+  });
+
+  if (navLinks.length && 'IntersectionObserver' in window) {
+    var byId = {};
+    navLinks.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
+
+    var visible = {};
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        visible[entry.target.id] = entry.isIntersecting;
+      });
+      /* Sections can overlap the band during a scroll; the lower one is the
+         one the reader has arrived at, so let the last match win. */
+      var current = null;
+      Object.keys(byId).forEach(function (id) {
+        if (visible[id]) current = id;
+      });
+      navLinks.forEach(function (a) {
+        if (a.getAttribute('href') === '#' + current) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      });
+    }, { rootMargin: '-80px 0px -70% 0px' });
+
+    Object.keys(byId).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
   }
 
   /* ------------------------------------------------------------ Footer year */
