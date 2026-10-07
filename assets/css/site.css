@@ -33,6 +33,45 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
+/* ----------------------------------------------------- Chinese typography
+   The Latin faces carry no CJK glyphs, and the tracking the Latin setting
+   relies on works against Chinese: negative tracking on headings, wide
+   tracking on uppercase labels, and a 1.12 heading leading that is too tight
+   once glyphs fill their em box. Overridden per-token so every component
+   inherits the change. */
+html[lang|="zh"] {
+  --display: "Noto Serif SC", "Songti SC", STSong, "SimSun", serif;
+  --sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+}
+html[lang|="zh"] h1,
+html[lang|="zh"] h2,
+html[lang|="zh"] h3,
+html[lang|="zh"] h4 {
+  letter-spacing: 0;
+  line-height: 1.32;
+}
+/* CJK glyphs read larger than Latin at the same size, so the display scale
+   comes down rather than across. */
+html[lang|="zh"] h1 { font-size: clamp(2.1rem, 4.4vw, 3.3rem); }
+html[lang|="zh"] h2 { font-size: clamp(1.6rem, 2.9vw, 2.3rem); }
+html[lang|="zh"] h3 { font-size: 1.2rem; }
+html[lang|="zh"] .pull { font-size: clamp(1.3rem, 2.4vw, 1.85rem); line-height: 1.6; letter-spacing: 0; }
+html[lang|="zh"] .lede { font-size: clamp(1.02rem, 1.4vw, 1.18rem); line-height: 1.8; }
+html[lang|="zh"] body { line-height: 1.85; }
+/* Uppercase does nothing to CJK, and 0.2em tracking pulls the characters
+   apart; enough is kept to still read as a label. */
+html[lang|="zh"] .eyebrow,
+html[lang|="zh"] .svc .fn,
+html[lang|="zh"] .case-meta b,
+html[lang|="zh"] .case-meta span,
+html[lang|="zh"] label,
+html[lang|="zh"] .scope legend,
+html[lang|="zh"] .tags span { letter-spacing: 0.08em; }
+/* The wordmark stays Latin on both versions. */
+html[lang|="zh"] .brand-mark { font-family: "EB Garamond", Georgia, serif; letter-spacing: 0.21em; }
+
+
+
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 /* Clears the sticky header when a nav link jumps to a section. */
@@ -169,6 +208,17 @@ a:hover { color: var(--accent-2); }
 }
 .nav-cta:hover { background: var(--ink); color: var(--sand); }
 .nav-cta[aria-current] { background: var(--ink); color: var(--sand); }
+
+.nav-lang {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 4px 0;
+  border-bottom: 1px solid transparent;
+  white-space: nowrap;
+}
+.nav-lang:hover { color: var(--ink); border-bottom-color: var(--brass); }
 
 .nav-toggle {
   display: none;

@@ -1,9 +1,59 @@
 /* ======================================================================
    Ellen Presents — shared behaviour
-   Loaded by every page. No dependencies, no build step.
+   Loaded by both language versions. No dependencies, no build step.
    ====================================================================== */
 (function () {
   'use strict';
+
+  /* ------------------------------------------------------------------ Text
+     Both language versions load this file; strings follow <html lang>. */
+  var ZH = document.documentElement.lang.slice(0, 2) === 'zh';
+
+  var T = ZH ? {
+    menu: '\u83dc\u5355',
+    close: '\u5173\u95ed',
+    need: {
+      name: '\u59d3\u540d',
+      email: '\u90ae\u7bb1',
+      eventType: '\u6d3b\u52a8\u7c7b\u578b',
+      message: '\u6d3b\u52a8\u7b80\u4ecb'
+    },
+    missing: function (what) { return '\u8bf7\u586b\u5199' + what + '\u3002'; },
+    incomplete: '\u8bf7\u8865\u5168\u6807\u7ea2\u7684\u5b57\u6bb5\u3002',
+    opening: function (addr) {
+      return '\u6b63\u5728\u6253\u5f00\u90ae\u4ef6\u5ba2\u6237\u7aef\uff0c\u5185\u5bb9\u5df2\u7ecf\u586b\u597d\u3002\u5982\u679c\u6ca1\u6709\u53cd\u5e94\uff0c\u8bf7\u76f4\u63a5\u53d1\u90ae\u4ef6\u81f3 ' +
+        addr + '\uff0c\u6211\u4eec\u4f1a\u5c3d\u5feb\u56de\u590d\u3002';
+    },
+    subject: '\u6d3b\u52a8\u54a8\u8be2 \u2014 ',
+    field: {
+      name: '\u59d3\u540d', company: '\u516c\u53f8', email: '\u90ae\u7bb1',
+      eventType: '\u6d3b\u52a8\u7c7b\u578b', location: '\u6d3b\u52a8\u5730\u70b9',
+      date: '\u6d3b\u52a8\u65e5\u671f', guests: '\u9884\u8ba1\u4eba\u6570',
+      scope: '\u9700\u8981\u534f\u52a9\u7684\u90e8\u5206', message: '\u6d3b\u52a8\u7b80\u4ecb'
+    }
+  } : {
+    menu: 'Menu',
+    close: 'Close',
+    need: {
+      name: 'your name',
+      email: 'your email',
+      eventType: 'an event type',
+      message: 'a little about the event'
+    },
+    missing: function (what) { return 'Please add ' + what + '.'; },
+    incomplete: 'Please complete the highlighted fields.',
+    opening: function (addr) {
+      return 'Opening your email app with these details ready to send. ' +
+        'If nothing opens, email ' + addr + ' directly and we will reply ' +
+        'within one business day.';
+    },
+    subject: 'Event enquiry \u2014 ',
+    field: {
+      name: 'Name', company: 'Company', email: 'Email', eventType: 'Event type',
+      location: 'Location', date: 'Date', guests: 'Estimated guests',
+      scope: 'Help needed with', message: 'About the event'
+    }
+  };
 
   /* ------------------------------------------------------------ Mobile nav */
   var menu = document.getElementById('nav-menu');
@@ -13,14 +63,14 @@
     if (!menu || !toggle) return;
     menu.classList.remove('is-open');
     toggle.setAttribute('aria-expanded', 'false');
-    toggle.textContent = 'Menu';
+    toggle.textContent = T.menu;
   }
 
   if (toggle && menu) {
     toggle.addEventListener('click', function () {
       var open = menu.classList.toggle('is-open');
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-      toggle.textContent = open ? 'Close' : 'Menu';
+      toggle.textContent = open ? T.close : T.menu;
     });
     window.addEventListener('resize', function () {
       if (window.innerWidth > 720) closeMenu();
@@ -84,12 +134,7 @@
   var status = document.getElementById('formStatus');
   if (!form || !status) return;
 
-  var REQ = {
-    name: 'your name',
-    email: 'your email',
-    eventType: 'an event type',
-    message: 'a little about the event'
-  };
+  var REQ = T.need;
 
   function value(id) {
     var el = document.getElementById(id);
@@ -106,22 +151,24 @@
 
   function compose() {
     var scope = checkedScope();
+    var f = T.field;
+    var dash = '\u2014';
     var body = [
-      'Name: ' + value('name'),
-      'Company: ' + (value('company') || '—'),
-      'Email: ' + value('email'),
-      'Event type: ' + value('eventType'),
-      'Location: ' + (value('location') || '—'),
-      'Date: ' + (value('date') || '—'),
-      'Estimated guests: ' + (value('guests') || '—'),
-      'Help needed with: ' + (scope.length ? scope.join(', ') : '—'),
+      f.name + ': ' + value('name'),
+      f.company + ': ' + (value('company') || dash),
+      f.email + ': ' + value('email'),
+      f.eventType + ': ' + value('eventType'),
+      f.location + ': ' + (value('location') || dash),
+      f.date + ': ' + (value('date') || dash),
+      f.guests + ': ' + (value('guests') || dash),
+      f.scope + ': ' + (scope.length ? scope.join(', ') : dash),
       '',
-      'About the event:',
+      f.message + ':',
       value('message')
     ].join('\n');
 
     return 'mailto:' + ENQUIRY_ADDRESS +
-      '?subject=' + encodeURIComponent('Event enquiry — ' + value('name')) +
+      '?subject=' + encodeURIComponent(T.subject + value('name')) +
       '&body=' + encodeURIComponent(body);
   }
 
@@ -139,12 +186,12 @@
         if (bad) el.setAttribute('aria-invalid', 'true');
         else el.removeAttribute('aria-invalid');
       }
-      if (slot) slot.textContent = bad ? 'Please add ' + REQ[id] + '.' : '';
+      if (slot) slot.textContent = bad ? T.missing(REQ[id]) : '';
       if (bad && !first) first = el;
     });
 
     if (first) {
-      status.textContent = 'Please complete the highlighted fields.';
+      status.textContent = T.incomplete;
       status.classList.add('is-error');
       status.hidden = false;
       first.focus();
@@ -152,9 +199,7 @@
     }
 
     status.classList.remove('is-error');
-    status.textContent = 'Opening your email app with these details ready to send. ' +
-      'If nothing opens, email ' + ENQUIRY_ADDRESS + ' directly and we will reply ' +
-      'within one business day.';
+    status.textContent = T.opening(ENQUIRY_ADDRESS);
     status.hidden = false;
     window.location.href = compose();
   });
