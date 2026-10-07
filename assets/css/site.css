@@ -339,12 +339,9 @@ a:hover { color: var(--accent-2); }
 }
 
 /* ---------------------------------------------------------- Form */
-.form-shell {
-  display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
-  gap: clamp(34px, 6vw, 78px);
-  align-items: start;
-}
+/* The form stands alone now. Capped so inputs stay a comfortable width
+   instead of stretching the full page. */
+.form-shell { max-width: 760px; }
 .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
 .field { display: flex; flex-direction: column; gap: 7px; }
 .field.full { grid-column: 1 / -1; }
@@ -384,7 +381,9 @@ textarea { resize: vertical; min-height: 124px; }
 }
 .check-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  /* 260px keeps this at two columns inside the capped form, matching the
+     field grid above; 220px let it break into three ragged ones. */
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 2px 20px;
 }
 .check {
@@ -434,19 +433,6 @@ input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="
 
 .form-status.is-error { border-left-color: var(--brass); }
 
-.aside dl { margin: 0; display: flex; flex-direction: column; }
-.aside dt {
-  font-size: 0.71rem;
-  font-weight: 600;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: var(--muted);
-  border-top: 1px solid var(--line);
-  padding-top: 17px;
-  margin-top: 22px;
-}
-.aside dd { margin: 6px 0 0; font-size: 0.96rem; color: var(--umber); }
-
 /* ---------------------------------------------------------- Footer */
 .site-footer { background: var(--sand-2); border-top: 1px solid var(--line); }
 .foot-bot {
@@ -461,7 +447,7 @@ input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="
 
 /* ---------------------------------------------------------- Responsive */
 @media (max-width: 900px) {
-  .form-shell, .row, .case { grid-template-columns: 1fr; }
+  .row, .case { grid-template-columns: 1fr; }
   .row, .case { gap: 12px; }
 }
 @media (max-width: 720px) {
