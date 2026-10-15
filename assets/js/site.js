@@ -244,9 +244,18 @@
     });
     payload.locale = ZH ? 'zh' : 'en';
 
+    /* Google Apps Script cannot answer a CORS preflight, and an
+       application/json body triggers one. The same JSON sent as text/plain
+       skips the preflight, and the script reads the raw body either way.
+       Everything else (Formspree, Basin, a Worker) wants real JSON. */
+    var isAppsScript = /script\.google\.com/.test(ENQUIRY_ENDPOINT);
+
     fetch(ENQUIRY_ENDPOINT, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      headers: {
+        'Content-Type': isAppsScript ? 'text/plain;charset=utf-8' : 'application/json',
+        'Accept': 'application/json'
+      },
       body: JSON.stringify(payload)
     }).then(function (r) {
       if (!r.ok) throw new Error(r.status);

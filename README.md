@@ -84,6 +84,28 @@ Formspree, Basin, a Cloudflare Worker fronting Airtable or a CRM.
 Nothing else needs to change. Both language versions share this file, and the
 status messages follow `<html lang>`.
 
+### Google Sheets via Apps Script
+
+`backend/google-apps-script.gs` is a ready endpoint: it appends each
+submission to a sheet and emails a notification. To use it —
+
+1. Create a Google Sheet and name the first tab `Enquiries`.
+2. **Extensions -> Apps Script**, replace the stub with that file, and set
+   `NOTIFY_TO` to the address that should hear about enquiries.
+3. **Deploy -> New deployment -> Web app**, with *Execute as: Me* and
+   *Who has access: **Anyone***. The site posts anonymously, so anything
+   narrower rejects every enquiry.
+4. Paste the `/exec` URL into `ENQUIRY_ENDPOINT` and bump `?v=` on both pages.
+
+Re-deploy as a **new version** after editing the script; an existing
+deployment keeps serving the old code, which makes edits look as though they
+did nothing.
+
+Apps Script cannot answer a CORS preflight, and an `application/json` body
+triggers one. `site.js` therefore sends the same JSON as `text/plain` when
+the endpoint is on `script.google.com`, which skips the preflight; the script
+parses the raw body either way. Nothing needs configuring for this.
+
 ### Spam
 
 Each form carries a hidden `website` field, positioned off-screen rather than
