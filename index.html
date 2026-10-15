@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&amp;family=Libre+Franklin:wght@400;500;600&amp;display=swap" />
-  <link rel="stylesheet" href="assets/css/site.css?v=4" />
+  <link rel="stylesheet" href="assets/css/site.css?v=5" />
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -266,6 +266,10 @@
                 <textarea id="message" name="message" required aria-describedby="err-message"></textarea>
                 <div class="field-error" id="err-message" data-for="message"></div>
               </div>
+              <div class="hp" aria-hidden="true">
+                <label for="website">Leave this field empty</label>
+                <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+              </div>
               <div class="form-status" id="formStatus" hidden></div>
               <div class="form-foot">
                 <button class="btn" type="submit">Start Planning</button>
@@ -289,6 +293,6 @@
     </div>
   </footer>
 
-  <script src="assets/js/site.js?v=4"></script>
+  <script src="assets/js/site.js?v=5"></script>
 </body>
 </html>

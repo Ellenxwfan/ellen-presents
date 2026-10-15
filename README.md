@@ -63,22 +63,34 @@ registrar.
 
 ## Wiring up the enquiry form
 
-The form validates in the browser, but a static site has no server to post
-to. Until a backend is connected, a valid submission opens the visitor's mail
-client with every field composed into a message to `hello@ellenpresents.com`,
-and the on-page status repeats that address so an enquiry is never silently
-lost when no mail client is configured.
+`assets/js/site.js` has one constant that decides where an enquiry goes:
 
-To connect a form service (Formspree, Getform, Basin, or similar):
+```js
+var ENQUIRY_ENDPOINT = '';
+```
 
-1. Add the endpoint as the form's `action` in `index.html` and set
-   `method="post"`.
-2. In `assets/js/site.js`, replace `window.location.href = compose();` at the
-   end of the submit handler with a `fetch()` POST to that endpoint, and show
-   the success or failure message in `#formStatus`.
+**Empty** (the current state): a valid submission composes a `mailto:` to
+`hello@ellenpresents.com` with every field filled in, and the on-page status
+repeats the address so nothing is lost when the visitor has no mail client
+configured.
 
-Keep the validation block above it — it populates the inline field errors and
-the `aria-invalid` states.
+**Set to a URL**: the same submission is POSTed there as JSON instead —
+`{name, company, email, eventType, location, date, guests, scope, message,
+locale}`, where `locale` is `en` or `zh`. The button disables while it is in
+flight, the form clears on success, and a failure falls back to telling the
+visitor to email directly. Anything that accepts a JSON POST works:
+Formspree, Basin, a Cloudflare Worker fronting Airtable or a CRM.
+
+Nothing else needs to change. Both language versions share this file, and the
+status messages follow `<html lang>`.
+
+### Spam
+
+Each form carries a hidden `website` field, positioned off-screen rather than
+`display:none`, which some bots check for. A real visitor never sees it and
+cannot tab into it. If it comes back filled the submission is dropped
+silently — the page still says thank you, so the bot has nothing to learn —
+and the field is never included in what is posted.
 
 ## Content and brand notes
 

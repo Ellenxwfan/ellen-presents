@@ -480,6 +480,10 @@ textarea { resize: vertical; min-height: 124px; }
 }
 .check:hover { color: var(--ink); }
 
+/* Bait for bots, which fill every field they find. Off-screen rather than
+   display:none, which some bots check for. Never shown, never focusable. */
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
 .form-foot { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 22px; }
 .form-foot p { font-size: 0.85rem; color: var(--muted); }
 .form-status {

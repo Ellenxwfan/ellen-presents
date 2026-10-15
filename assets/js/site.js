@@ -25,6 +25,11 @@
         addr + '\uff0c\u6211\u4eec\u4f1a\u5c3d\u5feb\u56de\u590d\u3002';
     },
     subject: '\u6d3b\u52a8\u54a8\u8be2 \u2014 ',
+    sending: '\u6b63\u5728\u53d1\u9001\u2026',
+    sent: '\u6536\u5230\u4e86\uff0c\u8c22\u8c22\u3002\u6211\u4eec\u4f1a\u5c3d\u5feb\u56de\u590d\u3002',
+    failed: function (addr) {
+      return '\u63d0\u4ea4\u6ca1\u6709\u6210\u529f\u3002\u8bf7\u76f4\u63a5\u53d1\u90ae\u4ef6\u81f3 ' + addr + '\uff0c\u6216\u7a0d\u540e\u518d\u8bd5\u3002';
+    },
     field: {
       name: '\u59d3\u540d', company: '\u516c\u53f8', email: '\u90ae\u7bb1',
       eventType: '\u6d3b\u52a8\u7c7b\u578b', location: '\u6d3b\u52a8\u5730\u70b9',
@@ -48,6 +53,11 @@
         'within one business day.';
     },
     subject: 'Event enquiry \u2014 ',
+    sending: 'Sending\u2026',
+    sent: 'Thank you \u2014 your enquiry has been received. We will reply shortly.',
+    failed: function (addr) {
+      return 'That did not send. Please email ' + addr + ' directly, or try again in a moment.';
+    },
     field: {
       name: 'Name', company: 'Company', email: 'Email', eventType: 'Event type',
       location: 'Location', date: 'Date', guests: 'Estimated guests',
@@ -130,6 +140,12 @@
      the enquiry is never silently lost if no mail client is configured. */
   var ENQUIRY_ADDRESS = 'hello@ellenpresents.com';
 
+  /* Where the form posts. Leave empty and a valid submission falls back to
+     composing a mailto, which is what the site did before any backend
+     existed. Set it to a Formspree/Worker/Basin URL and the same submission
+     is posted as JSON instead, with the mailto kept as the failure path. */
+  var ENQUIRY_ENDPOINT = '';
+
   var form = document.getElementById('enquiryForm');
   var status = document.getElementById('formStatus');
   if (!form || !status) return;
@@ -198,10 +214,50 @@
       return;
     }
 
+    /* A bot filled the hidden field. Say nothing useful and send nothing. */
+    var hp = document.getElementById('website');
+    if (hp && hp.value) {
+      status.classList.remove('is-error');
+      status.textContent = T.sent;
+      status.hidden = false;
+      form.reset();
+      return;
+    }
+
     status.classList.remove('is-error');
-    status.textContent = T.opening(ENQUIRY_ADDRESS);
     status.hidden = false;
-    window.location.href = compose();
+
+    if (!ENQUIRY_ENDPOINT) {
+      status.textContent = T.opening(ENQUIRY_ADDRESS);
+      window.location.href = compose();
+      return;
+    }
+
+    var submit = form.querySelector('button[type="submit"]');
+    status.textContent = T.sending;
+    if (submit) submit.disabled = true;
+
+    var payload = {};
+    new FormData(form).forEach(function (v, k) {
+      if (k === 'website') return;
+      payload[k] = payload[k] ? payload[k] + ', ' + v : v;
+    });
+    payload.locale = ZH ? 'zh' : 'en';
+
+    fetch(ENQUIRY_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function (r) {
+      if (!r.ok) throw new Error(r.status);
+      status.textContent = T.sent;
+      form.reset();
+    }).catch(function () {
+      status.classList.add('is-error');
+      status.textContent = T.failed(ENQUIRY_ADDRESS);
+    }).then(function () {
+      if (submit) submit.disabled = false;
+    });
   });
 
   form.querySelectorAll('input, select, textarea').forEach(function (el) {
